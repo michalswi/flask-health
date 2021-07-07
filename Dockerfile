@@ -7,7 +7,7 @@ WORKDIR /app
 
 COPY app.py .
 COPY checkStatus.py .
-COPY requirements requirements
+COPY requirements .
 
 RUN pip install -r requirements
 
