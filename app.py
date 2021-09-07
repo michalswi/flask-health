@@ -6,7 +6,7 @@ from checkStatus import get_status_code
 
 app = Flask(__name__)
 
-PORT = os.environ.get("SERVER_PORT", "5000")
+PORT = os.environ.get("APP_PORT", "5000")
 URL = f"http://localhost:{PORT}"
 
 @app.route('/', methods=['GET'])

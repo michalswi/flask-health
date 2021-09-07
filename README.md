@@ -24,8 +24,12 @@ Targets:
 az login
 make az-rg
 make az-aci
+
+$ make az-aci-fqdn
+flaskhz-7tb8u1d.westeurope.azurecontainer.io
+
+$ curl http://flaskhz-7tb8u1d.westeurope.azurecontainer.io:8080/hz
+OK
+
+make az-rg-del
 ```
-
-![hello](./img/hello.png)
-
-![hz](./img/hz.png)

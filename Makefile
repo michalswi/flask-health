@@ -4,13 +4,13 @@ ALPINE_VERSION := 3.11
 GIT_REPO := github.com/michalswi/flask-health
 DOCKER_REPO := michalsw
 
-APPNAME ?= flaskhz
+APPNAME := flaskhz
+APP_PORT := 80
+# port 80,443 in ACI won't work because of 'dummy' user (permission denied):
+LOCAL_PORT := 8080
 VERSION ?= $(shell git describe --tags --always 2>/dev/null || echo testdev)
 
-SERVER_PORT ?= 8080
-
 AZ_RG ?= flaskhz
-AZ_PORT ?= 80
 AZ_LOCATION ?= westeurope
 AZ_RANDOM ?=$(shell head /dev/urandom | tr -dc a-z0-9 | head -c 7)
 AZ_DNS_LABEL ?= $(APPNAME)-$(AZ_RANDOM)
@@ -32,9 +32,11 @@ docker-build: ## Build docker image
 	.
 
 docker-run: ## Run docker
-	docker run --rm -d \
-	-p $(SERVER_PORT):$(SERVER_PORT) \
-	--name $(APPNAME) $(APPNAME):latest && \
+	docker run -d --rm \
+	--env APP_PORT=$(APP_PORT) \
+	-p $(LOCAL_PORT):$(APP_PORT) \
+	--name $(APPNAME) \
+	"$(DOCKER_REPO)/$(APPNAME):latest" && \
 	docker ps
 
 docker-stop: ## Stop docker
@@ -50,13 +52,13 @@ az-aci:	## Run app (Azure Container Instance)
 	az container create \
 	--resource-group $(AZ_RG) \
 	--name $(APPNAME) \
-	--image michalsw/$(APPNAME) \
+	--image $(DOCKER_REPO)/$(APPNAME) \
 	--restart-policy Always \
-	--ports $(AZ_PORT) \
+	--ports $(LOCAL_PORT) \
 	--dns-name-label $(AZ_DNS_LABEL) \
 	--location $(AZ_LOCATION) \
 	--environment-variables \
-		SERVER_PORT=$(AZ_PORT)
+		APP_PORT=$(LOCAL_PORT)
 
 az-aci-fqdn: ## Get app FQDN
 	az container list \
