@@ -1,1 +1,3 @@
-__pycache__/*
+.azure*
+__pycache__
+.github

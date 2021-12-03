@@ -6,7 +6,7 @@ DOCKER_REPO := michalsw
 
 APPNAME := flaskhz
 APP_PORT := 80
-# port 80,443 in ACI won't work because of 'dummy' user (permission denied):
+# port 80,443 in ACI won't work (permission denied) because of 'dummy' user (> Dockerfile):
 LOCAL_PORT := 8080
 VERSION ?= $(shell git describe --tags --always 2>/dev/null || echo testdev)
 
