@@ -3,11 +3,11 @@
 
 name: Build and deploy Python app to Azure Web App - ms-flask
 
-on: [push]
-# on:
-#   push:
-#     branches:
-#       - master
+# on: [push]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   demo:
